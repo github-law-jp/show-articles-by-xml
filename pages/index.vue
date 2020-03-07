@@ -8,9 +8,11 @@
       <h2 class="subtitle">
         {{ article[0].LawTitle[0] }}
       </h2>
-      <div v-for="(capter, index) in SupplProvision" v-bind:key="index">{{capter.ArticleTitle[0]}}
-        <div v-for="(paragraph, index2) in capter.Paragraph[0].ParagraphSentence[0].Sentence" v-bind:key="index2">
-          <div v-for="(sentence, index3) in paragraph" v-bind:key="index3">{{sentence}}</div>
+      <div class="article">
+        <div class="capters" v-for="(capter, index2) in SupplProvision" v-bind:key="index2">{{capter.ArticleTitle[0]}}
+          <div v-for="(paragraph, index3) in capter.Paragraph[0].ParagraphSentence[0].Sentence" v-bind:key="index3">
+            {{paragraph["_"]}}
+          </div>
         </div>
       </div>
     </div>
@@ -46,7 +48,7 @@ export default {
 
 <style>
 .container {
-  margin: 0 auto;
+  margin: auto 20px;
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -74,5 +76,8 @@ export default {
 
 .links {
   padding-top: 15px;
+}
+.article {
+  text-align: left;
 }
 </style>
