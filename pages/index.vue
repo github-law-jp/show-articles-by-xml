@@ -6,10 +6,21 @@
         show-articles-by-xml
       </h1>
       <h2 class="subtitle">
-        {{ article[0].LawTitle[0] }}
+        {{ fulldata.LawBody[0].LawTitle[0] }}
       </h2>
       <div class="article" v-for="(article, index1) in SupplProvision" v-bind:key="index1">
+        <span class="SupplProvisionLabel">{{article.SupplProvisionLabel[0]}}</span>
         <div class="capters" v-for="(capter, index2) in article.Article" v-bind:key="index2">{{capter.ArticleTitle[0]}}
+          <div v-for="(paragraph, index3) in capter.Paragraph[0].ParagraphSentence[0].Sentence" v-bind:key="index3">
+            {{paragraph["_"]}}
+          </div>
+        </div>
+      </div>
+      <div class="article" v-for="(article, index1) in fulldata.LawBody[0].MainProvision[0].Chapter" v-bind:key="index1">
+        <span class="SupplProvisionLabel">{{article.ChapterTitle[0]}}</span>
+        <div class="capters" v-for="(capter, index2) in article.Article" v-bind:key="index2">
+          <div v-if="capter.ArticleCaption">{{capter.ArticleCaption[0]}}</div>
+          <div v-if="capter.ArticleTitle">{{capter.ArticleTitle[0]}}</div>
           <div v-for="(paragraph, index3) in capter.Paragraph[0].ParagraphSentence[0].Sentence" v-bind:key="index3">
             {{paragraph["_"]}}
           </div>
@@ -33,14 +44,17 @@ export default {
     return axios.get('/data/410AC0000000114_20160401_426AC0000000115.xml')
       .then((res) => {
         console.log(res)
-        let aticle
+        let article
         ps.parseString(res.data, (message, xmlres) => {
           // store.commit('article', xmlres)
-          aticle = xmlres.Law
+          article = xmlres.Law
         })
-        console.log(aticle)
-        console.log(aticle.LawBody[0].SupplProvision[0].Article)
-        return { article: aticle.LawBody, SupplProvision: aticle.LawBody[0].SupplProvision }
+        console.log(article)
+        console.log(article.LawBody[0].SupplProvision[0].Article)
+        return {
+          fulldata: article,
+          SupplProvision: article.LawBody[0].SupplProvision
+        }
       })
   }
 }
@@ -79,5 +93,8 @@ export default {
 }
 .article {
   text-align: left;
+}
+.SupplProvisionLabel {
+  font-weight: bold;
 }
 </style>
